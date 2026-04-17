@@ -1,0 +1,68 @@
+PACKAGING LINE PLC LADDER LOGIC
+
+---
+
+## NETWORK 1: START/STOP LATCH
+
+| I0.0 (START)     I0.1 (STOP NC) |
+|----[ ]-----------[/]-------------+----( M0.0 ) |
+|                                 |
+|----[ M0.0 ]----------------------|
+
+Description:
+M0.0 is latched when START is pressed and STOP is not active.
+
+---
+
+## NETWORK 2: BOX CONVEYOR CONTROL
+
+| M0.0        I0.3 (BOX PRESENT NC)   I0.1 |
+|----[ ]-----------[/]----------------[/]----( Q0.0 ) |
+
+Description:
+Box conveyor runs when system is ON and no box is detected.
+
+---
+
+## NETWORK 3: APPLE CONVEYOR CONTROL
+
+| M0.0        I0.3 (BOX PRESENT)     I0.1     C0.Q (NC) |
+|----[ ]-----------[ ]---------------[/]--------[/]----( Q0.1 ) |
+
+Description:
+Apple conveyor runs when box is present and stops when count reaches 10.
+
+---
+
+## NETWORK 4: APPLE COUNTER
+
+| I0.2 (APPLE SENSOR) |
+|----[ ]----------------------( CU C0 ) |
+
+COUNTER C0:
+
+* TYPE: UP COUNTER
+* PRESET VALUE (PV): 10
+
+---
+
+## NETWORK 5: COUNTER RESET
+
+| C0.Q |
+|----[ ]----------------------( R C0 ) |
+
+Description:
+Counter resets after reaching 10 apples.
+
+---
+
+## NETWORK 6: SEQUENCE CONTROL (OPTIONAL)
+
+| C0.Q |
+|----[ ]----------------------( RESET Q0.1 ) |
+
+| C0.Q |
+|----[ ]----------------------( SET Q0.0 ) |
+
+Description:
+Ensures proper switching between conveyors.
